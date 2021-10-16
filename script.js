@@ -28,11 +28,22 @@ const GameBoard = (() => {
     return board;
   };
 
-  return { addToBoard, resetBoard, getBoard, getField };
+  let getEmptyIndexes = () => {
+    let emptyIndexs = [];
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] === "") {
+        emptyIndexs.push(i);
+      }
+    }
+    return emptyIndexs;
+  };
+
+  return { addToBoard, resetBoard, getBoard, getField, getEmptyIndexes };
 })();
 
 const Game = (() => {
   let gameRunning = true;
+  let aiMode = false;
   let playerX = Player("X");
   let playerO = Player("O");
   let round = 1;
@@ -41,6 +52,35 @@ const Game = (() => {
   let playRound = (index) => {
     GameBoard.addToBoard(index, getCurrentPlayerSign());
     if (checkWinner(index)) {
+      displayController.colorWinningCOmbination(winningCombination);
+      displayController.displayUpdate("win");
+      gameRunning = false;
+      return;
+    }
+    if (round === 9) {
+      displayController.displayUpdate("tie");
+      gameRunning = false;
+      return;
+    }
+
+    round++;
+    if (aiMode) {
+      playRoundAI();
+      if (!gameRunning) {
+        return;
+      }
+    }
+
+    displayController.displayUpdate("turn");
+  };
+
+  let playRoundAI = () => {
+    console.log(round);
+    let empty = GameBoard.getEmptyIndexes();
+    let randomIndex = empty[Math.floor(Math.random() * empty.length)];
+    GameBoard.addToBoard(randomIndex, getCurrentPlayerSign());
+    displayController.displayAIMove(randomIndex);
+    if (checkWinner(randomIndex)) {
       displayController.colorWinningCOmbination(winningCombination);
       displayController.displayUpdate("win");
       gameRunning = false;
@@ -89,10 +129,21 @@ const Game = (() => {
     GameBoard.resetBoard();
     round = 1;
     gameRunning = true;
+    displayController.emptyFields();
   };
 
   let isGameOver = () => {
     return !gameRunning;
+  };
+
+  let changeMode = (mode) => {
+    if (mode === "pvp" && aiMode) {
+      aiMode = false;
+      reset();
+    } else if (mode === "ai" && !aiMode) {
+      aiMode = true;
+      reset();
+    }
   };
 
   return {
@@ -100,6 +151,7 @@ const Game = (() => {
     isGameOver,
     getCurrentPlayerSign,
     reset,
+    changeMode,
   };
 })();
 
@@ -135,7 +187,16 @@ const displayController = (() => {
     }
   });
 
+  let displayAIMove = (index) => {
+    fields.forEach((field) => {
+      if (parseInt(field.dataset.location) === index) {
+        field.textContent = Game.getCurrentPlayerSign();
+      }
+    });
+  };
+
   let emptyFields = () => {
+    updateField.textContent = "Player X's Turn";
     fields.forEach((field) => {
       field.textContent = "";
       field.style.backgroundColor = `rgba(50, 53, 58, 1)`;
@@ -145,7 +206,6 @@ const displayController = (() => {
 
   clearBtn.addEventListener("click", () => {
     Game.reset();
-    emptyFields();
   });
 
   let colorWinningCOmbination = (combination) => {
@@ -173,8 +233,30 @@ const displayController = (() => {
     }
   };
 
+  let controlBtns = document.querySelectorAll(".control_btn");
+  controlBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      if (!btn.classList.contains("active_btn")) {
+        btn.classList.add("active_btn");
+      }
+
+      if (btn.classList.contains("pvpBtn")) {
+        Game.changeMode("pvp");
+      } else if (btn.classList.contains("pvcBtn")) {
+        Game.changeMode("ai");
+      }
+      controlBtns.forEach((btn) => {
+        if (btn != e.target) {
+          btn.classList.remove("active_btn");
+        }
+      });
+    });
+  });
+
   return {
     colorWinningCOmbination,
     displayUpdate,
+    emptyFields,
+    displayAIMove,
   };
 })();
