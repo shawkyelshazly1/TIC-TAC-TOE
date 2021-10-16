@@ -1,0 +1,146 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3rem;
+  width: 100vw;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 1rem;
+  padding-top: 1rem;
+}
+
+.header img {
+  width: 80px;
+  height: 80px;
+}
+
+.header h3 {
+  font-size: 50px;
+  color: #3a3a3c;
+  font-family: "Rampart One", cursive;
+}
+
+.updateScreen {
+  display: flex;
+  padding-top: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.update {
+  font-size: 35px;
+  font-family: "Luckiest Guy", cursive;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  gap: 2rem;
+}
+
+.main .controls {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.main::after {
+  flex: 1;
+  content: "";
+}
+
+.main .controls button {
+  width: 20vw;
+  padding: 10px 45px;
+  font-size: 25px;
+  background-color: rgba(65, 68, 73, 0.931);
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+}
+
+.main .controls button:hover {
+  background-color: rgba(50, 53, 58, 1);
+  transform: scale(1.1);
+}
+
+.main .controls .active_btn {
+  background-color: rgba(50, 53, 58, 1);
+}
+
+.main .gameContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.gameContainer .field {
+  font-family: "Rampart One", cursive;
+  border: none;
+  border-bottom: 8px rgb(211, 208, 208) solid;
+  border-right: 8px rgb(211, 208, 208) solid;
+  padding: 0px 45px;
+  color: white;
+  background-color: rgba(50, 53, 58, 1);
+  cursor: pointer;
+  font-size: 120px;
+  transition: all ease-in-out 0.2s;
+  width: 182px;
+  height: 182px;
+}
+
+/*  */
+
+/* .gameContainer .field.empty:hover {
+  background-color: rgba(89, 91, 95, 0.931);
+} */
+
+.gameContainer .no-r {
+  border-right: none;
+}
+
+.gameContainer .no-b {
+  border-bottom: none;
+}
+
+.footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: rgb(71, 71, 71);
+  font-size: 20px;
+  padding-bottom: 15px;
+}
+
+.footer .fab {
+  color: rgb(36, 41, 47);
+  font-size: 30px;
+}
